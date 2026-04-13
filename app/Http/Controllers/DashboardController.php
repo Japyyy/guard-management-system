@@ -8,16 +8,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalGuards = Guard::count();
-        $activeGuards = Guard::active()->count();
-        $expiredLicenses = Guard::expired()->count();
-        $expiringLicenses = Guard::expiring()->count();
+        $guards = Guard::with('company')
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get()
+            ->map(function ($guard) {
+                return [
+                    'id' => $guard->id,
+                    'full_name' => $guard->full_name,
+                    'birthdate' => optional($guard->birthdate)->format('Y-m-d'),
+                    'license_validity_date' => optional($guard->license_validity_date)->format('Y-m-d'),
+                    'company_name' => optional($guard->company)->company_name,
+                ];
+            });
 
-        return view('dashboard', compact(
-            'totalGuards',
-            'activeGuards',
-            'expiredLicenses',
-            'expiringLicenses'
-        ));
+        return view('dashboard', [
+            'guardsJson' => $guards->values()->toJson(),
+            'totalGuards' => $guards->count(),
+        ]);
     }
 }
