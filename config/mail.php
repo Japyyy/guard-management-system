@@ -115,4 +115,15 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | HR Receiver Email
+    |--------------------------------------------------------------------------
+    |
+    | This email will receive the automatic license expiry memo notifications.
+    |
+    */
+
+    'hr_email' => env('MAIL_HR_EMAIL'),
+
 ];

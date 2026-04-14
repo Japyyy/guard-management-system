@@ -3,100 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Guard Management System</title>
+    <title>Perseus Safety and Security Agency</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="h-screen overflow-hidden bg-[#f3f6fb] text-slate-800">
+<body class="h-screen overflow-hidden bg-[#eef3f9] text-slate-800">
     <div class="flex h-screen overflow-hidden">
 
         {{-- SIDEBAR --}}
-        <aside class="w-[290px] shrink-0 bg-gradient-to-b from-[#0b1220] via-[#0f172a] to-[#111827] text-white border-r border-slate-800 shadow-2xl flex flex-col">
+        <aside class="w-[300px] shrink-0 bg-[linear-gradient(180deg,#08111f_0%,#0b1728_45%,#0f1d31_100%)] text-white border-r border-white/5 shadow-2xl flex flex-col">
             <div class="px-6 py-6 border-b border-white/10">
                 <div class="flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/20">
-                        SG
+                    <div class="h-14 w-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-lg">
+                        <img src="{{ asset('images/perseus-logo.png') }}" alt="Perseus Logo" class="h-11 w-11 object-contain">
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold leading-tight">Security Guard</h1>
-                        <p class="text-sm text-slate-400">Management System</p>
+                        <p class="text-lg font-bold leading-tight">Perseus Safety and</p>
+                        <p class="text-lg font-bold leading-tight">Security Agency</p>
+                        <p class="mt-1 text-xs tracking-[0.18em] uppercase text-slate-400">Guard Management System</p>
                     </div>
                 </div>
             </div>
 
-            <div class="px-4 py-5">
-                <p class="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Main Navigation
+            <div class="px-5 pt-5 pb-3">
+                <p class="px-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                    Navigation
                 </p>
             </div>
 
             <nav class="flex-1 px-4 space-y-2">
                 <a href="{{ route('dashboard') }}"
                    class="group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200
-                   {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-900/30' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="h-5 w-5 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10h14V10" />
-                    </svg>
+                   {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-xl shadow-cyan-900/20' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
+                    <div class="h-10 w-10 rounded-xl flex items-center justify-center {{ request()->routeIs('dashboard') ? 'bg-white/15' : 'bg-white/5 group-hover:bg-white/10' }}">
+                        <svg class="h-5 w-5 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10h14V10" />
+                        </svg>
+                    </div>
                     <div>
                         <p class="text-sm font-semibold">Dashboard</p>
-                        <p class="text-xs {{ request()->routeIs('dashboard') ? 'text-blue-100' : 'text-slate-500 group-hover:text-slate-300' }}">Overview and alerts</p>
+                        <p class="text-xs {{ request()->routeIs('dashboard') ? 'text-cyan-100' : 'text-slate-500 group-hover:text-slate-300' }}">Live overview</p>
                     </div>
                 </a>
 
                 <a href="{{ route('guards.index') }}"
                    class="group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200
-                   {{ request()->routeIs('guards.*') ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-900/30' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="h-5 w-5 {{ request()->routeIs('guards.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5V4H2v16h5" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 20h6M12 16v4M8 8a4 4 0 118 0 4 4 0 01-8 0Zm-1 8a5 5 0 0110 0" />
-                    </svg>
+                   {{ request()->routeIs('guards.*') ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-xl shadow-cyan-900/20' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
+                    <div class="h-10 w-10 rounded-xl flex items-center justify-center {{ request()->routeIs('guards.*') ? 'bg-white/15' : 'bg-white/5 group-hover:bg-white/10' }}">
+                        <svg class="h-5 w-5 {{ request()->routeIs('guards.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5V4H2v16h5" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 20h6M12 16v4M8 8a4 4 0 118 0 4 4 0 01-8 0Zm-1 8a5 5 0 0110 0" />
+                        </svg>
+                    </div>
                     <div>
                         <p class="text-sm font-semibold">Guards</p>
-                        <p class="text-xs {{ request()->routeIs('guards.*') ? 'text-blue-100' : 'text-slate-500 group-hover:text-slate-300' }}">Personnel records</p>
+                        <p class="text-xs {{ request()->routeIs('guards.*') ? 'text-cyan-100' : 'text-slate-500 group-hover:text-slate-300' }}">Personnel records</p>
                     </div>
                 </a>
 
                 <a href="{{ route('companies.index') }}"
                    class="group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200
-                   {{ request()->routeIs('companies.*') ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-900/30' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="h-5 w-5 {{ request()->routeIs('companies.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 21h16M6 21V7l6-4 6 4v14M9 10h.01M15 10h.01M9 14h.01M15 14h.01" />
-                    </svg>
+                   {{ request()->routeIs('companies.*') ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-xl shadow-cyan-900/20' : 'text-slate-300 hover:bg-white/5 hover:text-white' }}">
+                    <div class="h-10 w-10 rounded-xl flex items-center justify-center {{ request()->routeIs('companies.*') ? 'bg-white/15' : 'bg-white/5 group-hover:bg-white/10' }}">
+                        <svg class="h-5 w-5 {{ request()->routeIs('companies.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 21h16M6 21V7l6-4 6 4v14M9 10h.01M15 10h.01M9 14h.01M15 14h.01" />
+                        </svg>
+                    </div>
                     <div>
                         <p class="text-sm font-semibold">Companies</p>
-                        <p class="text-xs {{ request()->routeIs('companies.*') ? 'text-blue-100' : 'text-slate-500 group-hover:text-slate-300' }}">Deployment clients</p>
+                        <p class="text-xs {{ request()->routeIs('companies.*') ? 'text-cyan-100' : 'text-slate-500 group-hover:text-slate-300' }}">Deployment clients</p>
                     </div>
                 </a>
             </nav>
 
             <div class="p-4">
                 <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Operations Note</p>
-                    <p class="mt-2 text-sm leading-6 text-slate-300">
-                        Monitor expiring licenses, review birthdays, and keep deployment records updated.
-                    </p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Signed In</p>
+                    <p class="mt-3 text-sm font-semibold text-white">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-slate-400">{{ auth()->user()->email }}</p>
+
+                    <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                        @csrf
+                        <button type="submit"
+                                class="w-full rounded-2xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-700 transition">
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </div>
         </aside>
 
-        {{-- CONTENT --}}
+        {{-- MAIN --}}
         <div class="flex-1 h-screen overflow-y-auto">
             <div class="min-h-full p-6 md:p-8">
-                <div class="mx-auto max-w-7xl">
-                    <div class="mb-6 rounded-[28px] border border-white/60 bg-white/75 backdrop-blur-sm shadow-[0_10px_40px_rgba(15,23,42,0.06)] px-6 py-5">
-                        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Control Center</p>
-                                <h2 class="mt-1 text-2xl font-bold text-slate-900">
-                                    {{ request()->routeIs('dashboard') ? 'System Dashboard' : (request()->routeIs('guards.*') ? 'Guard Records' : 'Company Management') }}
-                                </h2>
-                            </div>
+                <div class="mx-auto max-w-[1500px]">
 
-                            <div class="inline-flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 shadow-sm min-w-[260px]">
-                                <span class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Live Date & Time</span>
-                                <span id="liveDateTime" class="text-sm font-medium text-slate-700">Loading...</span>
+                    @if(request()->routeIs('dashboard'))
+                        <div class="mb-6 rounded-[30px] border border-white/70 bg-white/70 backdrop-blur-xl px-6 py-5 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
+                            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div>
+                                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-600">
+                                        Perseus Control Center
+                                    </p>
+                                    <h1 class="mt-2 text-2xl md:text-3xl font-bold text-slate-900">
+                                        System Dashboard
+                                    </h1>
+                                    <p class="mt-1 text-sm text-slate-500">
+                                        Monitor personnel records, license timelines, and deployment operations.
+                                    </p>
+                                </div>
+
+                                <div class="inline-flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 shadow-sm min-w-[270px]">
+                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Live Date & Time</span>
+                                    <span id="liveDateTime" class="text-sm font-medium text-slate-700">Loading...</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     @if(session('success'))
                         <div class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800 shadow-sm">
@@ -115,7 +137,7 @@
                         </div>
                     @endif
 
-                    <div class="rounded-[32px] border border-white/70 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] p-6 md:p-8">
+                    <div class="rounded-[34px] border border-white/80 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] p-6 md:p-8">
                         @yield('content')
                     </div>
                 </div>
@@ -123,30 +145,31 @@
         </div>
     </div>
 
-    <script>
-        function updateLiveDateTime() {
-            const now = new Date();
+    @if(request()->routeIs('dashboard'))
+        <script>
+            function updateLiveDateTime() {
+                const now = new Date();
+                const formatted = now.toLocaleString('en-US', {
+                    timeZone: 'Asia/Manila',
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                });
 
-            const formatted = now.toLocaleString('en-US', {
-                timeZone: 'Asia/Manila',
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: '2-digit',
-                hour: 'numeric',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-            });
-
-            const el = document.getElementById('liveDateTime');
-            if (el) {
-                el.textContent = formatted;
+                const el = document.getElementById('liveDateTime');
+                if (el) {
+                    el.textContent = formatted;
+                }
             }
-        }
 
-        updateLiveDateTime();
-        setInterval(updateLiveDateTime, 1000);
-    </script>
+            updateLiveDateTime();
+            setInterval(updateLiveDateTime, 1000);
+        </script>
+    @endif
 </body>
 </html>

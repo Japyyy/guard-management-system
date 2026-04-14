@@ -26,6 +26,8 @@ class Guard extends Model
         'pagibig_number',
         'tin_number',
         'nbi_clearance_date',
+        'notified_60_days',
+        'notified_30_days',
     ];
 
     protected $casts = [
@@ -33,6 +35,8 @@ class Guard extends Model
         'date_hired' => 'date',
         'license_validity_date' => 'date',
         'nbi_clearance_date' => 'date',
+        'notified_60_days' => 'boolean',
+        'notified_30_days' => 'boolean',
     ];
 
     protected $appends = [
@@ -57,13 +61,22 @@ class Guard extends Model
     public function getStatusAttribute(): string
     {
         $today = Carbon::today();
+        $validity = $this->license_validity_date;
 
-        if ($this->license_validity_date->lt($today)) {
+        if (!$validity) {
+            return 'No License Date';
+        }
+
+        if ($validity->lt($today)) {
             return 'Expired';
         }
 
-        if ($this->license_validity_date->between($today, $today->copy()->addMonths(3))) {
-            return 'Expiring';
+        if ($validity->lte($today->copy()->addDays(30))) {
+            return 'Expiring in 30 Days';
+        }
+
+        if ($validity->lte($today->copy()->addDays(60))) {
+            return 'Expiring in 60 Days';
         }
 
         return 'Active';
@@ -71,7 +84,7 @@ class Guard extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereDate('license_validity_date', '>=', Carbon::today());
+        return $query->whereDate('license_validity_date', '>', Carbon::today()->copy()->addDays(60));
     }
 
     public function scopeExpired($query)
@@ -79,11 +92,27 @@ class Guard extends Model
         return $query->whereDate('license_validity_date', '<', Carbon::today());
     }
 
+    public function scopeExpiringIn30Days($query)
+    {
+        return $query->whereBetween('license_validity_date', [
+            Carbon::today(),
+            Carbon::today()->copy()->addDays(30),
+        ]);
+    }
+
+    public function scopeExpiringIn60Days($query)
+    {
+        return $query->whereBetween('license_validity_date', [
+            Carbon::today()->copy()->addDays(31),
+            Carbon::today()->copy()->addDays(60),
+        ]);
+    }
+
     public function scopeExpiring($query)
     {
         return $query->whereBetween('license_validity_date', [
             Carbon::today(),
-            Carbon::today()->copy()->addMonths(3),
+            Carbon::today()->copy()->addDays(60),
         ]);
     }
 }
