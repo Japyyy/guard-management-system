@@ -97,29 +97,6 @@
             <div class="min-h-full p-6 md:p-8">
                 <div class="mx-auto max-w-[1500px]">
 
-                    @if(request()->routeIs('dashboard'))
-                        <div class="mb-6 rounded-[30px] border border-white/70 bg-white/70 backdrop-blur-xl px-6 py-5 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
-                            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                                <div>
-                                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-600">
-                                        Perseus Control Center
-                                    </p>
-                                    <h1 class="mt-2 text-2xl md:text-3xl font-bold text-slate-900">
-                                        System Dashboard
-                                    </h1>
-                                    <p class="mt-1 text-sm text-slate-500">
-                                        Monitor personnel records, license timelines, and deployment operations.
-                                    </p>
-                                </div>
-
-                                <div class="inline-flex flex-col rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 shadow-sm min-w-[270px]">
-                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Live Date & Time</span>
-                                    <span id="liveDateTime" class="text-sm font-medium text-slate-700">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
                     @if(session('success'))
                         <div class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800 shadow-sm">
                             {{ session('success') }}
