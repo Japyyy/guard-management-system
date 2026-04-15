@@ -7,11 +7,17 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::withCount('guards')
-            ->latest()
-            ->paginate(10);
+        $query = Company::withCount('guards');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where('company_name', 'like', "%{$search}%");
+        }
+
+        $companies = $query->latest()->get();
 
         return view('companies.index', compact('companies'));
     }

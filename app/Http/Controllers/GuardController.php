@@ -13,31 +13,49 @@ class GuardController extends Controller
     {
         $query = Guard::with('company');
 
-        if ($request->filled('status')) {
-            if ($request->status === 'active') {
-                $query->active();
-            } elseif ($request->status === 'expired') {
-                $query->expired();
-            } elseif ($request->status === 'expiring') {
-                $query->expiring();
-            }
-        }
-
         if ($request->filled('company_id')) {
             $query->where('company_id', $request->company_id);
         }
 
         if ($request->filled('search')) {
             $search = $request->search;
+
             $query->where(function ($q) use ($search) {
                 $q->where('last_name', 'like', "%{$search}%")
-                  ->orWhere('first_name', 'like', "%{$search}%")
-                  ->orWhere('middle_name', 'like', "%{$search}%")
-                  ->orWhere('license_number', 'like', "%{$search}%");
+                ->orWhere('first_name', 'like', "%{$search}%")
+                ->orWhere('middle_name', 'like', "%{$search}%")
+                ->orWhere('license_number', 'like', "%{$search}%");
             });
         }
 
-        $guards = $query->latest()->paginate(10)->withQueryString();
+        if ($request->filled('status')) {
+            $today = now()->startOfDay()->toDateString();
+            $plus30 = now()->startOfDay()->addDays(30)->toDateString();
+            $plus31 = now()->startOfDay()->addDays(31)->toDateString();
+            $plus60 = now()->startOfDay()->addDays(60)->toDateString();
+
+            switch ($request->status) {
+                case 'active':
+                    $query->whereDate('license_validity_date', '>', $plus60);
+                    break;
+
+                case 'expired':
+                    $query->whereDate('license_validity_date', '<', $today);
+                    break;
+
+                case 'expiring_30':
+                    $query->whereDate('license_validity_date', '>=', $today)
+                        ->whereDate('license_validity_date', '<=', $plus30);
+                    break;
+
+                case 'expiring_60':
+                    $query->whereDate('license_validity_date', '>=', $plus31)
+                        ->whereDate('license_validity_date', '<=', $plus60);
+                    break;
+            }
+        }
+
+        $guards = $query->latest()->get();
         $companies = Company::orderBy('company_name')->get();
 
         return view('guards.index', compact('guards', 'companies'));
