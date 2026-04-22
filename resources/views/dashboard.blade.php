@@ -22,7 +22,7 @@
         {{-- TOP STATS --}}
         <div class="grid shrink-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <a href="{{ route('guards.index') }}"
-               class="group rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+               class="group rounded-3xl border-2 border-slate-400 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-500 hover:shadow-md">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Total Guards</p>
@@ -40,7 +40,7 @@
             </a>
 
             <a href="{{ route('guards.index', ['status' => 'active']) }}"
-               class="group rounded-3xl border border-emerald-200 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md">
+               class="group rounded-3xl border-2 border-emerald-400 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-500 hover:shadow-md">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Active</p>
@@ -55,7 +55,7 @@
             </a>
 
             <a href="{{ route('guards.index', ['status' => 'expired']) }}"
-               class="group rounded-3xl border border-red-200 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md">
+               class="group rounded-3xl border-2 border-red-400 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-red-500 hover:shadow-md">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Expired</p>
@@ -70,7 +70,7 @@
             </a>
 
             <a href="{{ route('guards.index', ['status' => 'expiring_30']) }}"
-               class="group rounded-3xl border border-amber-200 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-md">
+               class="group rounded-3xl border-2 border-amber-400 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-500 hover:shadow-md">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">30 Days</p>
@@ -86,7 +86,7 @@
             </a>
 
             <a href="{{ route('guards.index', ['status' => 'expiring_60']) }}"
-               class="group rounded-3xl border border-yellow-200 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-yellow-300 hover:shadow-md">
+               class="group rounded-3xl border-2 border-yellow-400 bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-yellow-500 hover:shadow-md">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">60 Days</p>
@@ -107,8 +107,8 @@
             {{-- LEFT COLUMN --}}
             <div class="xl:col-span-8 min-h-0 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {{-- BIRTHDAY TODAY --}}
-                <div class="rounded-3xl border border-pink-200 bg-white shadow-sm flex min-h-0 flex-col overflow-hidden">
-                    <div class="flex items-center justify-between border-b border-pink-100 px-5 py-4 shrink-0">
+                <div class="rounded-3xl border-2 border-pink-400 bg-white shadow-sm flex min-h-0 flex-col overflow-hidden">
+                    <div class="flex items-center justify-between border-b-2 border-pink-300 px-5 py-4 shrink-0">
                         <div>
                             <h3 class="text-base font-semibold text-slate-900">Birthday Today</h3>
                             <p class="mt-1 text-sm text-slate-500">Celebrants for today</p>
@@ -120,8 +120,8 @@
                 </div>
 
                 {{-- UPCOMING BIRTHDAYS --}}
-                <div class="rounded-3xl border border-blue-200 bg-white shadow-sm flex min-h-0 flex-col overflow-hidden">
-                    <div class="flex items-center justify-between border-b border-blue-100 px-5 py-4 shrink-0">
+                <div class="rounded-3xl border-2 border-blue-400 bg-white shadow-sm flex min-h-0 flex-col overflow-hidden">
+                    <div class="flex items-center justify-between border-b-2 border-blue-300 px-5 py-4 shrink-0">
                         <div>
                             <h3 class="text-base font-semibold text-slate-900">Upcoming Birthdays</h3>
                             <p class="mt-1 text-sm text-slate-500">Nearest scheduled birthdays</p>
@@ -135,8 +135,8 @@
 
             {{-- RIGHT COLUMN --}}
             <div class="xl:col-span-4 min-h-0">
-                <div class="rounded-3xl border border-amber-200 bg-white shadow-sm flex h-full min-h-0 flex-col overflow-hidden">
-                    <div class="flex items-center justify-between border-b border-amber-100 px-5 py-4 shrink-0">
+                <div class="rounded-3xl border-2 border-amber-400 bg-white shadow-sm flex h-full min-h-0 flex-col overflow-hidden">
+                    <div class="flex items-center justify-between border-b-2 border-amber-300 px-5 py-4 shrink-0">
                         <div>
                             <h3 class="text-base font-semibold text-slate-900">License Alerts</h3>
                             <p class="mt-1 text-sm text-slate-500">Expiring within the next 60 days</p>

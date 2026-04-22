@@ -30,7 +30,6 @@
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-600">Company Record</p>
                             <h3 class="mt-2 text-2xl font-bold text-slate-900">{{ $company->company_name }}</h3>
-                            <p class="mt-1 text-sm text-slate-500">Deployment / Client Company</p>
                         </div>
 
                         <span class="inline-flex items-center rounded-full bg-blue-100 px-4 py-1.5 text-xs font-semibold text-blue-700">

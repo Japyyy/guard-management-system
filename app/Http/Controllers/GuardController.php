@@ -22,9 +22,10 @@ class GuardController extends Controller
 
             $query->where(function ($q) use ($search) {
                 $q->where('last_name', 'like', "%{$search}%")
-                ->orWhere('first_name', 'like', "%{$search}%")
-                ->orWhere('middle_name', 'like', "%{$search}%")
-                ->orWhere('license_number', 'like', "%{$search}%");
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('middle_name', 'like', "%{$search}%")
+                    ->orWhere('license_number', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%");
             });
         }
 
@@ -64,6 +65,7 @@ class GuardController extends Controller
     public function create()
     {
         $companies = Company::orderBy('company_name')->get();
+
         return view('guards.create', compact('companies'));
     }
 
@@ -79,6 +81,7 @@ class GuardController extends Controller
             'date_hired' => ['required', 'date'],
             'license_number' => ['required', 'string', 'max:255', 'unique:guards,license_number'],
             'license_validity_date' => ['required', 'date'],
+            'address' => ['nullable', 'string', 'max:500'],
             'sss_number' => ['nullable', 'string', 'max:255'],
             'philhealth_number' => ['nullable', 'string', 'max:255'],
             'pagibig_number' => ['nullable', 'string', 'max:255'],
@@ -96,12 +99,14 @@ class GuardController extends Controller
     public function show(Guard $guard)
     {
         $guard->load('company');
+
         return view('guards.show', compact('guard'));
     }
 
     public function edit(Guard $guard)
     {
         $companies = Company::orderBy('company_name')->get();
+
         return view('guards.edit', compact('guard', 'companies'));
     }
 
@@ -122,6 +127,7 @@ class GuardController extends Controller
                 Rule::unique('guards', 'license_number')->ignore($guard->id),
             ],
             'license_validity_date' => ['required', 'date'],
+            'address' => ['nullable', 'string', 'max:500'],
             'sss_number' => ['nullable', 'string', 'max:255'],
             'philhealth_number' => ['nullable', 'string', 'max:255'],
             'pagibig_number' => ['nullable', 'string', 'max:255'],

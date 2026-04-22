@@ -21,6 +21,7 @@ class Guard extends Model
         'date_hired',
         'license_number',
         'license_validity_date',
+        'address',
         'sss_number',
         'philhealth_number',
         'pagibig_number',
@@ -115,4 +116,4 @@ class Guard extends Model
             Carbon::today()->copy()->addDays(60),
         ]);
     }
-}
+}   

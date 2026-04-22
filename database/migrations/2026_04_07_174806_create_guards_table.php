@@ -21,6 +21,7 @@ return new class extends Migration
 
             $table->string('license_number')->unique();
             $table->date('license_validity_date');
+            $table->string('address')->nullable();
 
             $table->string('sss_number')->nullable();
             $table->string('philhealth_number')->nullable();

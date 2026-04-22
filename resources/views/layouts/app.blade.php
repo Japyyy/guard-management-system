@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-semibold">Companies</p>
-                        <p class="text-xs {{ request()->routeIs('companies.*') ? 'text-cyan-100' : 'text-slate-500 group-hover:text-slate-300' }}">Deployment clients</p>
+                        <p class="text-xs {{ request()->routeIs('companies.*') ? 'text-cyan-100' : 'text-slate-500 group-hover:text-slate-300' }}"></p>
                     </div>
                 </a>
             </nav>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuardController;
+use App\Http\Controllers\GuardLicenseOcrController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('guards', GuardController::class);
     Route::resource('companies', CompanyController::class);
+
+    Route::post('/guards/ocr/scan', [GuardLicenseOcrController::class, 'scan'])->name('guards.ocr.scan');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

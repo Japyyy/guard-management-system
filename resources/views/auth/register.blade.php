@@ -21,7 +21,7 @@
                 </div>
 
                 <p class="text-slate-300 text-lg leading-8">
-                    Create your account to access the system and manage security guard records, company assignments, and automated compliance alerts.
+                    Create account to access the system and manage security guard records, company assignments, and automated compliance alerts.
                 </p>
             </div>
         </div>
@@ -33,7 +33,6 @@
                         <img src="{{ asset('images/perseus-logo.png') }}" alt="Perseus Logo" class="h-16 w-16 object-contain">
                     </div>
                     <h2 class="mt-5 text-2xl font-bold text-slate-900">Create Account</h2>
-                    <p class="mt-2 text-sm text-slate-500">Register first before logging in to the system.</p>
                 </div>
 
                 <form method="POST" action="{{ route('register.post') }}" class="space-y-5">

@@ -67,7 +67,6 @@
                                 <td class="px-6 py-4 align-middle">
                                     <div class="min-w-0">
                                         <p class="truncate font-semibold text-slate-900">{{ $company->company_name }}</p>
-                                        <p class="mt-1 text-xs text-slate-500">Deployment / Client</p>
                                     </div>
                                 </td>
 
