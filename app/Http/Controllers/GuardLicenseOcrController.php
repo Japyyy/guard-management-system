@@ -18,13 +18,21 @@ class GuardLicenseOcrController extends Controller
                 'license_image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp'],
             ]);
 
-            $path = $request->file('license_image')->store('temp', 'local');
+            $uploadedFile = $request->file('license_image');
+            $path = $uploadedFile->store('temp', 'local');
             $fullPath = Storage::disk('local')->path($path);
+
+            Log::info('License OCR scan started', [
+                'file_name' => $uploadedFile->getClientOriginalName(),
+                'file_size' => $uploadedFile->getSize(),
+                'stored_path' => $path,
+                'full_path' => $fullPath,
+            ]);
 
             if (! file_exists($fullPath)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Uploaded image file was not found.',
+                    'message' => 'Uploaded image file was not saved correctly.',
                     'data' => [],
                 ], 422);
             }
@@ -45,6 +53,17 @@ class GuardLicenseOcrController extends Controller
                 ->filter(fn ($value) => filled($value))
                 ->count();
 
+            Log::info('License OCR scan completed successfully', [
+                'fields_filled' => $filledCount,
+                'extracted_data' => [
+                    'last_name' => $data['last_name'],
+                    'first_name' => $data['first_name'],
+                    'middle_name' => $data['middle_name'],
+                    'license_number' => $data['license_number'],
+                    'license_validity_date' => $data['license_validity_date'],
+                ],
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => $filledCount > 0
@@ -52,9 +71,16 @@ class GuardLicenseOcrController extends Controller
                     : 'OCR completed but no usable values were extracted.',
                 'data' => $data,
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid image file. Please upload a valid JPG, PNG, or WebP image.',
+                'data' => [],
+            ], 422);
         } catch (\Throwable $e) {
             Log::error('Guard OCR scan failed', [
                 'message' => $e->getMessage(),
+                'exception_class' => get_class($e),
                 'trace' => $e->getTraceAsString(),
             ]);
 

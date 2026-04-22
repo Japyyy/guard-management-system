@@ -464,52 +464,74 @@ def main():
 
     image_path = sys.argv[1]
 
-    project_root = Path(__file__).resolve().parents[1]
-    debug_dir = str(project_root / "storage" / "app" / "ocr-debug")
-    ensure_dir(debug_dir)
+    try:
+        project_root = Path(__file__).resolve().parents[1]
+        debug_dir = str(project_root / "storage" / "app" / "ocr-debug")
+        ensure_dir(debug_dir)
 
-    image_bgr = cv2.imread(image_path)
-    if image_bgr is None:
-        print(json.dumps({"success": False, "message": f"Could not read image: {image_path}"}))
-        sys.exit(1)
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"Image file not found: {image_path}")
 
-    card = detect_and_crop_card(image_bgr)
-    card_path = os.path.join(debug_dir, "card-cropped.png")
-    cv2.imwrite(card_path, card)
+        image_bgr = cv2.imread(image_path)
+        if image_bgr is None:
+            raise ValueError(f"Could not read image: {image_path}")
 
-    lines, by_variant = run_multi_variant_ocr(card)
+        card = detect_and_crop_card(image_bgr)
+        card_path = os.path.join(debug_dir, "card-cropped.png")
+        cv2.imwrite(card_path, card)
 
-    name_data = extract_name_parts(lines)
-    license_number = extract_license_number(lines)
-    expiry_iso = extract_expiry_date(lines)
+        lines, by_variant = run_multi_variant_ocr(card)
 
-    debug_payload = {
-        "lines": lines,
-        "variant_lines": by_variant,
-        "extracted": {
+        name_data = extract_name_parts(lines)
+        license_number = extract_license_number(lines)
+        expiry_iso = extract_expiry_date(lines)
+
+        debug_payload = {
+            "lines": lines,
+            "variant_lines": by_variant,
+            "extracted": {
+                "last_name": name_data["last_name"],
+                "first_name": name_data["first_name"],
+                "middle_name": name_data["middle_name"],
+                "license_number": license_number,
+                "license_validity_date": expiry_iso,
+            }
+        }
+
+        with open(os.path.join(debug_dir, "last-run.txt"), "w", encoding="utf-8") as f:
+            f.write(json.dumps(debug_payload, indent=2, ensure_ascii=False))
+
+        payload = {
+            "success": True,
             "last_name": name_data["last_name"],
             "first_name": name_data["first_name"],
             "middle_name": name_data["middle_name"],
             "license_number": license_number,
             "license_validity_date": expiry_iso,
+            "raw": debug_payload,
+            "debug_dir": debug_dir,
         }
-    }
 
-    with open(os.path.join(debug_dir, "last-run.txt"), "w", encoding="utf-8") as f:
-        f.write(json.dumps(debug_payload, indent=2, ensure_ascii=False))
+        print(json.dumps(payload, ensure_ascii=False))
 
-    payload = {
-        "success": True,
-        "last_name": name_data["last_name"],
-        "first_name": name_data["first_name"],
-        "middle_name": name_data["middle_name"],
-        "license_number": license_number,
-        "license_validity_date": expiry_iso,
-        "raw": debug_payload,
-        "debug_dir": debug_dir,
-    }
-
-    print(json.dumps(payload, ensure_ascii=False))
+    except FileNotFoundError as e:
+        print(json.dumps({
+            "success": False,
+            "message": str(e)
+        }))
+        sys.exit(1)
+    except ValueError as e:
+        print(json.dumps({
+            "success": False,
+            "message": str(e)
+        }))
+        sys.exit(1)
+    except Exception as e:
+        print(json.dumps({
+            "success": False,
+            "message": f"OCR processing error: {str(e)}"
+        }))
+        sys.exit(1)
 
 
 if __name__ == "__main__":

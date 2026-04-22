@@ -31,6 +31,7 @@
             const status = document.getElementById('ocr_status');
 
             if (!scanButton || !fileInput || !status) {
+                console.error('OCR elements not found');
                 return;
             }
 
@@ -67,6 +68,7 @@
                         el.value = value;
                         return true;
                     }
+                    console.warn(`Invalid date format for ${id}: ${value}`);
                     return false;
                 }
 
@@ -104,9 +106,17 @@
                     let result = null;
 
                     if (contentType.includes('application/json')) {
-                        result = JSON.parse(rawText);
+                        try {
+                            result = JSON.parse(rawText);
+                        } catch (jsonError) {
+                            console.error('JSON Parse Error:', jsonError);
+                            console.error('Response body:', rawText.substring(0, 500));
+                            throw new Error('Server returned invalid JSON: ' + rawText.substring(0, 200));
+                        }
                     } else {
-                        throw new Error('Server returned HTML instead of JSON: ' + rawText.substring(0, 300));
+                        console.error('Wrong content type:', contentType);
+                        console.error('Response:', rawText.substring(0, 500));
+                        throw new Error('Server returned non-JSON response (likely an error)');
                     }
 
                     if (!response.ok || result.success === false) {
@@ -123,22 +133,23 @@
                         license_validity_date: setValue('license_validity_date', data.license_validity_date),
                     };
 
+                    console.log('Filled fields:', filled);
                     const filledCount = Object.values(filled).filter(Boolean).length;
 
                     if (filledCount === 0) {
-                        setStatus('OCR completed but no usable values were extracted. Check storage/app/ocr-debug/last-run.txt.', 'error');
+                        setStatus('OCR completed but no data was extracted. Please check the image quality and try again.', 'warning');
                         return;
                     }
 
                     if (filledCount < 5) {
-                        setStatus('Scan complete. Some fields were filled. Review everything before saving.', 'warning');
+                        setStatus(`Scan complete. ${filledCount}/5 fields filled. Review everything before saving.`, 'warning');
                         return;
                     }
 
-                    setStatus('Scan complete. Review the fields before saving.', 'success');
+                    setStatus('Scan complete. All fields filled. Review before saving.', 'success');
                 } catch (error) {
-                    console.error(error);
-                    setStatus(error.message || 'OCR scan failed.', 'error');
+                    console.error('OCR Error:', error);
+                    setStatus(error.message || 'OCR scan failed. Check browser console for details.', 'error');
                 } finally {
                     scanButton.disabled = false;
                     scanButton.textContent = 'Scan License';
