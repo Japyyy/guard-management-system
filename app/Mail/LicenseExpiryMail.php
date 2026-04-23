@@ -31,7 +31,7 @@ class LicenseExpiryMail extends Mailable
             ? 'URGENT: Security Guard License Expiring in 30 Days'
             : 'Notice: Security Guard License Expiring in 60 Days';
 
-        $logoPath = public_path('images/perseus-logo.png');
+        $logoPath = public_path('images/logo.png');
 
         $pdf = Pdf::loadView('pdf.license-memo', [
             'guard' => $this->guard,

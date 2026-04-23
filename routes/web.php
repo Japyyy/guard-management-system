@@ -22,6 +22,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::post('/scan-license', [GuardController::class, 'scanLicense'])->name('guards.scan-license');
     Route::resource('guards', GuardController::class);
     Route::resource('companies', CompanyController::class);
 

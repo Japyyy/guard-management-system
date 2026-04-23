@@ -295,6 +295,20 @@
                             </p>
                         </div>
                     </div>
+                    <div class="mt-3 grid grid-cols-2 gap-3">
+                        <div class="rounded-xl bg-white px-3 py-2">
+                            <p class="text-xs text-slate-500">60-Day Email</p>
+                            <p class="text-sm font-medium ${guard.notified_60_days ? 'text-emerald-600' : 'text-slate-600'}">
+                                ${guard.notified_60_days ? 'Sent' : 'Not sent'}
+                            </p>
+                        </div>
+                        <div class="rounded-xl bg-white px-3 py-2">
+                            <p class="text-xs text-slate-500">30-Day Email</p>
+                            <p class="text-sm font-medium ${guard.notified_30_days ? 'text-emerald-600' : 'text-slate-600'}">
+                                ${guard.notified_30_days ? 'Sent' : 'Not sent'}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }

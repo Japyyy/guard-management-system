@@ -19,6 +19,7 @@ class Guard extends Model
         'civil_status',
         'birthdate',
         'date_hired',
+        'address',
         'license_number',
         'license_validity_date',
         'sss_number',

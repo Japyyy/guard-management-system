@@ -14,7 +14,7 @@
             <div class="px-6 py-6 border-b border-white/10">
                 <div class="flex items-center gap-4">
                     <div class="h-14 w-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-lg">
-                        <img src="{{ asset('images/perseus-logo.png') }}" alt="Perseus Logo" class="h-11 w-11 object-contain">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-11 w-11 object-contain">
                     </div>
                     <div>
                         <p class="text-lg font-bold leading-tight">Perseus Safety and</p>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('civil_status');
             $table->date('birthdate');
             $table->date('date_hired');
-
+            $table->string('address');
             $table->string('license_number')->unique();
             $table->date('license_validity_date');
 

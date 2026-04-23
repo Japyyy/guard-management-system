@@ -19,6 +19,8 @@ class DashboardController extends Controller
                     'birthdate' => optional($guard->birthdate)->format('Y-m-d'),
                     'license_validity_date' => optional($guard->license_validity_date)->format('Y-m-d'),
                     'company_name' => optional($guard->company)->company_name,
+                    'notified_60_days' => (bool) $guard->notified_60_days,
+                    'notified_30_days' => (bool) $guard->notified_30_days,
                 ];
             });
 

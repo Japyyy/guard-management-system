@@ -12,7 +12,7 @@
             <div class="max-w-xl text-white">
                 <div class="flex items-center gap-4 mb-8">
                     <div class="h-20 w-20 rounded-3xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden">
-                        <img src="{{ asset('images/perseus-logo.png') }}" alt="Perseus Logo" class="h-16 w-16 object-contain">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-16 object-contain">
                     </div>
                     <div>
                         <h1 class="text-3xl font-bold leading-tight">Perseus Safety and</h1>
@@ -30,7 +30,7 @@
             <div class="w-full max-w-md rounded-[32px] bg-white shadow-2xl border border-white/60 p-8 md:p-10">
                 <div class="text-center mb-8">
                     <div class="mx-auto h-20 w-20 rounded-3xl bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
-                        <img src="{{ asset('images/perseus-logo.png') }}" alt="Perseus Logo" class="h-16 w-16 object-contain">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-16 object-contain">
                     </div>
                     <h2 class="mt-5 text-2xl font-bold text-slate-900">Create Account</h2>
                     <p class="mt-2 text-sm text-slate-500">Register first before logging in to the system.</p>

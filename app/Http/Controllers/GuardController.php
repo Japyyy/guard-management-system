@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Guard;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Symfony\Component\Process\Process;
 
 class GuardController extends Controller
 {
@@ -77,6 +82,7 @@ class GuardController extends Controller
             'civil_status' => ['required', 'string', 'max:100'],
             'birthdate' => ['required', 'date'],
             'date_hired' => ['required', 'date'],
+            'address' => ['nullable', 'string', 'max:255'],
             'license_number' => ['required', 'string', 'max:255', 'unique:guards,license_number'],
             'license_validity_date' => ['required', 'date'],
             'sss_number' => ['nullable', 'string', 'max:255'],
@@ -115,6 +121,7 @@ class GuardController extends Controller
             'civil_status' => ['required', 'string', 'max:100'],
             'birthdate' => ['required', 'date'],
             'date_hired' => ['required', 'date'],
+            'address' => ['nullable', 'string', 'max:255'],
             'license_number' => [
                 'required',
                 'string',
@@ -136,6 +143,89 @@ class GuardController extends Controller
             ->with('success', 'Guard updated successfully.');
     }
 
+    public function scanLicense(Request $request): JsonResponse
+    {
+        @ini_set('max_execution_time', '300');
+        @set_time_limit(300);
+
+        $validated = $request->validate([
+            'license_image' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
+        ]);
+
+        $tempPath = null;
+
+        try {
+            $tempPath = $this->storeTemporaryLicenseImage($validated['license_image']);
+            $process = new Process([
+                $this->pythonBinary(),
+                $this->ocrScriptPath(),
+                $tempPath,
+            ], base_path(), [
+                'GUARD_OCR_DEBUG_DIR' => $this->ocrDebugDirectory(),
+            ]);
+
+            $process->setTimeout($this->ocrTimeoutSeconds());
+            $process->run();
+
+            if (! $process->isSuccessful()) {
+                $decodedError = json_decode($process->getOutput(), true);
+                $message = is_array($decodedError) && ! empty($decodedError['error'])
+                    ? (string) $decodedError['error']
+                    : 'Unable to extract license details';
+
+                Log::warning('License OCR process failed.', [
+                    'exit_code' => $process->getExitCode(),
+                    'error_output' => $process->getErrorOutput(),
+                    'output' => $process->getOutput(),
+                ]);
+
+                return response()->json([
+                    'error' => $message,
+                ], 422);
+            }
+
+            $decoded = json_decode($process->getOutput(), true);
+
+            if (! is_array($decoded)) {
+                Log::warning('License OCR returned invalid JSON.', [
+                    'output' => $process->getOutput(),
+                ]);
+
+                return response()->json([
+                    'error' => 'Unable to extract license details',
+                ], 422);
+            }
+
+            if (! empty($decoded['error'])) {
+                return response()->json([
+                    'error' => (string) $decoded['error'],
+                ], 422);
+            }
+
+            $payload = $this->normalizeScanPayload($decoded);
+
+            if (count(array_filter($payload)) === 0) {
+                return response()->json([
+                    'error' => 'Unable to extract license details: OCR completed, but no supported fields were extracted.',
+                ], 422);
+            }
+
+            return response()->json($payload);
+        } catch (\Throwable $exception) {
+            Log::error('License scan failed.', [
+                'message' => $exception->getMessage(),
+            ]);
+
+            return response()->json([
+                'error' => 'Unable to extract license details: ' . $exception->getMessage(),
+            ], 422);
+        } finally {
+            if ($tempPath && File::exists($tempPath)) {
+                File::delete($tempPath);
+            }
+        }
+    }
+
     public function destroy(Guard $guard)
     {
         $guard->delete();
@@ -143,5 +233,88 @@ class GuardController extends Controller
         return redirect()
             ->route('guards.index')
             ->with('success', 'Guard deleted successfully.');
+    }
+
+    private function storeTemporaryLicenseImage(UploadedFile $file): string
+    {
+        $directory = storage_path('app/temp/license-scans');
+
+        if (! File::isDirectory($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+
+        $filename = uniqid('license_', true) . '.' . $file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        return $directory . DIRECTORY_SEPARATOR . $filename;
+    }
+
+    private function pythonBinary(): string
+    {
+        $configuredBinary = env('GUARD_OCR_PYTHON_BINARY');
+
+        if (is_string($configuredBinary) && $configuredBinary !== '' && File::exists($configuredBinary)) {
+            return $configuredBinary;
+        }
+
+        $legacyConfiguredBinary = env('PYTHON_EXE');
+
+        if (is_string($legacyConfiguredBinary) && $legacyConfiguredBinary !== '' && File::exists($legacyConfiguredBinary)) {
+            return $legacyConfiguredBinary;
+        }
+
+        $bundledBinary = base_path('.venv-paddle/Scripts/python.exe');
+
+        if (File::exists($bundledBinary)) {
+            return $bundledBinary;
+        }
+
+        return 'python';
+    }
+
+    private function ocrScriptPath(): string
+    {
+        $configuredScript = env('GUARD_OCR_SCRIPT');
+
+        if (is_string($configuredScript) && $configuredScript !== '' && File::exists($configuredScript)) {
+            return $configuredScript;
+        }
+
+        $legacyConfiguredScript = env('PADDLE_OCR_SCRIPT');
+
+        if (is_string($legacyConfiguredScript) && $legacyConfiguredScript !== '' && File::exists($legacyConfiguredScript)) {
+            return $legacyConfiguredScript;
+        }
+
+        return base_path('scripts/scan_guard_license.py');
+    }
+
+    private function ocrTimeoutSeconds(): int
+    {
+        $configuredTimeout = (int) env('GUARD_OCR_TIMEOUT_SECONDS', 300);
+
+        return max(60, $configuredTimeout);
+    }
+
+    private function ocrDebugDirectory(): string
+    {
+        $directory = storage_path('app/ocr-debug');
+
+        if (! File::isDirectory($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+
+        return $directory;
+    }
+
+    private function normalizeScanPayload(array $decoded): array
+    {
+        return [
+            'last_name' => trim((string) ($decoded['last_name'] ?? '')),
+            'first_name' => trim((string) ($decoded['first_name'] ?? '')),
+            'middle_name' => trim((string) ($decoded['middle_name'] ?? '')),
+            'license_number' => trim((string) ($decoded['license_number'] ?? '')),
+            'license_validity_date' => trim((string) ($decoded['license_validity_date'] ?? '')),
+        ];
     }
 }
