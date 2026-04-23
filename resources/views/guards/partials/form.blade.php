@@ -153,23 +153,38 @@
 
 {{-- GOVERNMENT IDS --}}
 <div class="md:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm mt-4">
+    
+    <h3 class="text-sm font-semibold text-slate-800 mb-3">Government IDs</h3>
+
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 
-        <input type="text" name="sss_number" placeholder="SSS Number"
-               value="{{ old('sss_number', $guard->sss_number ?? '') }}"
-               class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+        <div>
+            <label class="mb-1.5 block text-sm font-medium text-slate-700">SSS Number</label>
+            <input type="text" name="sss_number"
+                   value="{{ old('sss_number', $guard->sss_number ?? '') }}"
+                   class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+        </div>
 
-        <input type="text" name="philhealth_number" placeholder="PhilHealth Number"
-               value="{{ old('philhealth_number', $guard->philhealth_number ?? '') }}"
-               class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+        <div>
+            <label class="mb-1.5 block text-sm font-medium text-slate-700">PhilHealth Number</label>
+            <input type="text" name="philhealth_number"
+                   value="{{ old('philhealth_number', $guard->philhealth_number ?? '') }}"
+                   class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+        </div>
 
-        <input type="text" name="pagibig_number" placeholder="Pag-IBIG Number"
-               value="{{ old('pagibig_number', $guard->pagibig_number ?? '') }}"
-               class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+        <div>
+            <label class="mb-1.5 block text-sm font-medium text-slate-700">Pag-IBIG Number</label>
+            <input type="text" name="pagibig_number"
+                   value="{{ old('pagibig_number', $guard->pagibig_number ?? '') }}"
+                   class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+        </div>
 
-        <input type="text" name="tin_number" placeholder="TIN Number"
-               value="{{ old('tin_number', $guard->tin_number ?? '') }}"
-               class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+        <div>
+            <label class="mb-1.5 block text-sm font-medium text-slate-700">TIN Number</label>
+            <input type="text" name="tin_number"
+                   value="{{ old('tin_number', $guard->tin_number ?? '') }}"
+                   class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+        </div>
 
     </div>
 </div>
